@@ -16,3 +16,7 @@ npm install -g generator-angular
 yo angular bsngseed
 
 
+bower install angular-ui --save
+
+
+bower install angular-ui-router --save
