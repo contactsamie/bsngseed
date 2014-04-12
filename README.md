@@ -20,3 +20,9 @@ bower install angular-ui --save
 
 
 bower install angular-ui-router --save
+
+
+bower install angular-underscore-module --save
+
+
+bower install ng-table --save
