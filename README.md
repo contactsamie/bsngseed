@@ -13,6 +13,27 @@ npm install -g yo
 npm install -g generator-angular
 
 
+------------------------------------------------------dev
+
+
+npm install karma-jasmine --save-dev
+
+
+npm install -g generator-jasmine
+
+
+npm install karma-chrome-launcher --save-dev
+
+
+grunt --force
+
+
+grunt
+
+
+-------------------------------------------------------
+
+
 yo angular bsngseed
 
 
@@ -33,20 +54,6 @@ bower install ng-table --save
 
 bower install angular-xeditable --save
 
-
-------------------------------------------------------dev
-
-
-npm install karma-jasmine --save-dev
-
-
-npm install karma-chrome-launcher --save-dev
-
-
-grunt --force
-
-
-grunt
 
 
 -----------------------------------------------------APP.JS
