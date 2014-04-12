@@ -19,7 +19,7 @@ npm install -g generator-angular
 npm install karma-jasmine --save-dev
 
 
-npm install -g generator-jasmine
+npm install -g generator-jasmine  --save-dev
 
 
 npm install karma-chrome-launcher --save-dev
