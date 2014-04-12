@@ -25,12 +25,6 @@ npm install -g generator-jasmine
 npm install karma-chrome-launcher --save-dev
 
 
-grunt --force
-
-
-grunt
-
-
 -------------------------------------------------------
 
 
@@ -53,6 +47,16 @@ bower install ng-table --save
 
 
 bower install angular-xeditable --save
+
+
+
+-------------------------------------------------------
+
+
+grunt --force
+
+
+grunt
 
 
 
