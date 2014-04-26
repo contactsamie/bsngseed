@@ -31,6 +31,13 @@ npm install karma-chrome-launcher --save-dev
 yo angular bsngseed
 
 
+bower install components-font-awesome --save
+
+
+grunt bowerInstall  
+
+
+
 bower install angular-ui --save
 
 
