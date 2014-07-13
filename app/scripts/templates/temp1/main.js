@@ -1,1 +1,0 @@
-var main_temp = "main";
