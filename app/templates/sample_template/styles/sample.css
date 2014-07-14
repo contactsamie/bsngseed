@@ -1,6 +1,6 @@
 ﻿
  .container  {
-       background-image: url('../images/templates/sample_template/images/sample_template.png')
+       background-image: url('../images/sample_template.png')
     }
 /* Large desktops and laptops */
 @media (min-width: 1200px) {

@@ -2,7 +2,8 @@
   "name": "nglar",
   "version": "0.0.0",
   "dependencies": {
-    "angular-moment": "^0.7.1"
+    "angular-moment": "^0.7.1",
+    "grunt-remove": "^0.1.0"
   },
   "devDependencies": {
     "grunt": "^0.4.1",
