@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
 
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
             livereload: {
                 options: {
                     open: true,
-                    middleware: function(connect) {
+                    middleware: function (connect) {
                         return [
                             connect.static('.tmp'),
                             connect().use(
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
             test: {
                 options: {
                     port: 9001,
-                    middleware: function(connect) {
+                    middleware: function (connect) {
                         return [
                             connect.static('.tmp'),
                             connect.static('test'),
@@ -209,7 +209,7 @@ module.exports = function(grunt) {
                     /* DONT RENAME IMAGES*/
                     //'<%= yeoman.dist %>/lib/**/*.{png,jpg,jpeg,gif,webp,svg}',
                     //                    '<%= yeoman.dist %>/templates/**/*.{png,jpg,jpeg,gif,webp,svg}',
- //               '<%= yeoman.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
+                    //               '<%= yeoman.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
  //               '<%= yeoman.dist %>/styles/fonts/*'
                 ]
             }
@@ -296,9 +296,13 @@ module.exports = function(grunt) {
         //},
         imagemin: {
             dist: {
-                files:(function() {
-
+                files: (function () {
+                    grunt.log.subhead('IMAGE MOVE PROCESS START-------------------------------------------');
                     var pathName = ['images', 'img'];
+                    var specialFolders = ['lib', 'templates'];
+
+                    var destinations = ['dist', 'app'];
+
                     var fArray = [];
 
                     fArray.push({
@@ -307,42 +311,41 @@ module.exports = function(grunt) {
                         src: '**/*.{png,jpg,jpeg,gif}',
                         dest: '<%= yeoman.dist %>/images'
                     });
+                    var createCwd = function (specialFolder, pathN) {
+                        var path = grunt.file.expand('app/' + specialFolder + '/*/**/' + pathN + '/')[0];
 
-                    for (var i = 0; i < pathName.length; i++) {
-                       
-                        fArray.push({
-                            expand: true,
-                            cwd: (function () {
-                                var path = grunt.file.expand('app/lib/*/**/' + pathName[i] + '/')[0]; // '<%= yeoman.app %>/lib/../images',
+                        return path;
+                    };
 
-                                return path;
-                            })(),
+                    for (var k = 0; k < specialFolders.length; k++) {
+                        grunt.log.ok('preparing to move stuff to destination: ' + destinations[k] + '..............');
+                        for (var i = 0; i < pathName.length; i++) {
+                            grunt.log.ok('looking for folder:  ' + pathName[i] + '..........');
+                            for (var j = 0; j < specialFolders.length; j++) {
+                                grunt.log.ok('looking in special folder:  ' + specialFolders[j] + '..........');
 
-                            src: ['**/*.{png,jpg,jpeg,gif}'],
-                            dest: '<%= yeoman.dist %>/' + pathName[i]
-                        });
-                       
-                        fArray.push({
-                            expand: true,
-                            cwd: (function () {
-                                var path = grunt.file.expand('app/templates/*/**/' + pathName[i] + '/')[0]; // '<%= yeoman.app %>/lib/../images',
+                                var opt = {};
+                                grunt.log.writeln('-------------------------------------------');
+                                opt.expand = true;
+                                opt.cwd = createCwd(specialFolders[j], pathName[i]);
+                                opt.src = ['**/*.{png,jpg,jpeg,gif}'];
+                                opt.dest = '<%= yeoman.' + destinations[k] + ' %>/' + pathName[i];
 
-                                return path;
-                            })(),
+                                grunt.log.writeln('cwd=' + opt.cwd);
+                                grunt.log.writeln('src=' + opt.src);
+                                grunt.log.writeln('dest=' + opt.dest);
 
-                            src: ['**/*.{png,jpg,jpeg,gif}'],
-                            dest: '<%= yeoman.dist %>/' + pathName[i]
-                        });
-                    }
-                    var fil = [];
-                   
-                    for (var ii = 0; ii < fArray.length; ii++) {
-                        if (fArray[ii]&& fArray[ii].cwd) {
-                            fil.push(fArray[ii]);
+                                var willPush = opt && opt.cwd;
+
+                                willPush ? grunt.log.ok('OK******') : grunt.log.error('REJECTED ****');
+
+                                willPush && fArray.push(opt);
+                                grunt.log.writeln('-------------------------------------------');
+                            }
                         }
                     }
-                   
-                    return fil;
+                    grunt.log.subhead('IMAGE MOVE PROCESS END-------------------------------------------');
+                    return fArray;
                 })()
             }
         },
@@ -400,30 +403,30 @@ module.exports = function(grunt) {
         copy: {
             dist: {
                 files: [{
-                        expand: true,
-                        dot: true,
-                        cwd: '<%= yeoman.app %>',
-                        dest: '<%= yeoman.dist %>',
-                        src: [
-                            '*.{ico,png,txt}',
-                            '.htaccess',
-                            '*.html',
-                            'views/**/*.html',
-                            'setup/**/*.html',
-                            'images/**/*.{webp}',
-                            'fonts/*'
-                        ]
-                    }, {
-                        expand: true,
-                        cwd: '.tmp/images',
-                        dest: '<%= yeoman.dist %>/images',
-                        src: ['generated/*']
-                    }, {
-                        expand: true,
-                        cwd: 'bower_components/bootstrap/dist',
-                        src: 'fonts/*',
-                        dest: '<%= yeoman.dist %>'
-                    }]
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= yeoman.app %>',
+                    dest: '<%= yeoman.dist %>',
+                    src: [
+                        '*.{ico,png,txt}',
+                        '.htaccess',
+                        '*.html',
+                        'views/**/*.html',
+                        'setup/**/*.html',
+                        'images/**/*.{webp}',
+                        'fonts/*'
+                    ]
+                }, {
+                    expand: true,
+                    cwd: '.tmp/images',
+                    dest: '<%= yeoman.dist %>/images',
+                    src: ['generated/*']
+                }, {
+                    expand: true,
+                    cwd: 'bower_components/bootstrap/dist',
+                    src: 'fonts/*',
+                    dest: '<%= yeoman.dist %>'
+                }]
             },
             styles: {
                 expand: true,
@@ -467,7 +470,7 @@ module.exports = function(grunt) {
 
     // grunt.registerTask('imagepng', ['imagemin:png']);
 
-    grunt.registerTask('serve', 'Compile then start a connect web server', function(target) {
+    grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -482,7 +485,7 @@ module.exports = function(grunt) {
         ]);
     });
 
-    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function(target) {
+    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run(['serve:' + target]);
     });
