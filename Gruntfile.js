@@ -162,11 +162,21 @@ module.exports = function(grunt) {
         },
 
         // Automatically inject Bower components into the app
+        //wiredep: {
+        //    app: {
+        //        src: ['<%= yeoman.app %>/index.html'],
+        //        ignorePath: new RegExp('^<%= yeoman.app %>/|../')
+        //    }
+
+        // Automatically inject Bower components into the app
+        //http://stackoverflow.com/questions/20912260/can-i-change-what-path-gets-rendered-when-using-bower-in-an-yeoman-angular-app
         wiredep: {
             app: {
+                cwd: '',
                 src: ['<%= yeoman.app %>/index.html'],
-                ignorePath: new RegExp('^<%= yeoman.app %>/|../')
+                ignorePath: new RegExp('^<%= yeoman.app %>')
             }
+
             //updated script to inject karma as well see: https://github.com/stephenplusplus/grunt-bower-install/issues/35#issuecomment-32084805
             /*
             ,
@@ -198,7 +208,7 @@ module.exports = function(grunt) {
                     '<%= yeoman.dist %>/styles/**/*.css',
                     /* DONT RENAME IMAGES*/
                     //'<%= yeoman.dist %>/lib/**/*.{png,jpg,jpeg,gif,webp,svg}',
- //                    '<%= yeoman.dist %>/templates/**/*.{png,jpg,jpeg,gif,webp,svg}',
+                    //                    '<%= yeoman.dist %>/templates/**/*.{png,jpg,jpeg,gif,webp,svg}',
  //               '<%= yeoman.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
  //               '<%= yeoman.dist %>/styles/fonts/*'
                 ]
@@ -259,32 +269,83 @@ module.exports = function(grunt) {
         //   dist: {}
         // },
 
+        //imagemin: {
+        //    dist: {
+        //        files: [{
+        //                expand: true,
+        //                cwd: '<%= yeoman.app %>/images',
+        //                src: '**/*.{png,jpg,jpeg,gif}',
+        //                dest: '<%= yeoman.dist %>/images'
+        //            },
+        //            {
+        //                expand: true,
+        //                flatten: true,
+        //                cwd: '<%= yeoman.app %>/lib',
+        //                src: '**/images/**/*.{png,jpg,jpeg,gif}',
+        //                dest: '<%= yeoman.dist %>/images'
+        //            },
+        //            {
+        //                expand: true,
+        //                flatten: true,
+        //                cwd: '<%= yeoman.app %>/templates',
+        //                src: '**/images/**/*.{png,jpg,jpeg,gif}',
+        //                dest: '<%= yeoman.dist %>/images'
+        //            }
+        //        ]
+        //    }
+        //},
         imagemin: {
             dist: {
-                files: [{
+                files:(function() {
+
+                    var pathName = ['images', 'img'];
+                    var fArray = [];
+
+                    fArray.push({
                         expand: true,
                         cwd: '<%= yeoman.app %>/images',
                         src: '**/*.{png,jpg,jpeg,gif}',
                         dest: '<%= yeoman.dist %>/images'
-                    },
-                    {
-                        expand: true,
-                        flatten: true,
-                        cwd: '<%= yeoman.app %>/lib',
-                        src: '**/images/**/*.{png,jpg,jpeg,gif}',
-                        dest: '<%= yeoman.dist %>/images'
-                    },
-                    {
-                        expand: true,
-                        flatten: true,
-                        cwd: '<%= yeoman.app %>/templates',
-                        src: '**/images/**/*.{png,jpg,jpeg,gif}',
-                        dest: '<%= yeoman.dist %>/images'
+                    });
+
+                    for (var i = 0; i < pathName.length; i++) {
+                       
+                        fArray.push({
+                            expand: true,
+                            cwd: (function () {
+                                var path = grunt.file.expand('app/lib/*/**/' + pathName[i] + '/')[0]; // '<%= yeoman.app %>/lib/../images',
+
+                                return path;
+                            })(),
+
+                            src: ['**/*.{png,jpg,jpeg,gif}'],
+                            dest: '<%= yeoman.dist %>/' + pathName[i]
+                        });
+                       
+                        fArray.push({
+                            expand: true,
+                            cwd: (function () {
+                                var path = grunt.file.expand('app/templates/*/**/' + pathName[i] + '/')[0]; // '<%= yeoman.app %>/lib/../images',
+
+                                return path;
+                            })(),
+
+                            src: ['**/*.{png,jpg,jpeg,gif}'],
+                            dest: '<%= yeoman.dist %>/' + pathName[i]
+                        });
                     }
-                ]
+                    var fil = [];
+                   
+                    for (var ii = 0; ii < fArray.length; ii++) {
+                        if (fArray[ii]&& fArray[ii].cwd) {
+                            fil.push(fArray[ii]);
+                        }
+                    }
+                   
+                    return fil;
+                })()
             }
         },
-
         svgmin: {
             dist: {
                 files: [{
